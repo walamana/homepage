@@ -1,0 +1,139 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout page="index">
+
+    <div class="center" data-state="0">
+        <span class="first"></span>
+        <span class="second"></span>
+    </div>
+
+    <div class="bottom">
+        <span class="title">
+            <span class="bold">Hello!</span> I'm Jonas, computer science student at TUM
+        </span>
+        <p>This is just a place to show off :) If I can do something for you just hit me up!</p>
+    </div>
+
+	<script>
+		const el = document.querySelector(".center")
+        
+        let cur = document.querySelector(".center .first")
+        let next = document.querySelector(".center .second")
+
+        let counter = 0;
+        let data = [
+            "👨‍💻 Software development", 
+            "🎨 Web Design", 
+            "📷 Photography",
+        ]
+
+		let random = [
+			"🕺 Dancing",
+			"💤 Sleeping",
+			"🎉 Partying",
+			"📔 Studying",
+			"🎶 Listening to music",
+			"🎬 Binging netflix",
+			"🍩 Eating",
+			"🚅 Traveling"
+		]
+
+		data.push(random[Math.floor(Math.random() * (random.length))])
+
+
+        playNext().then()
+
+        async function playNext(){
+            console.log("Play");
+            next.innerHTML = data[counter]
+
+            cur.classList.add("up")
+            cur.classList.remove("cur")
+            next.classList.add("up")
+            next.classList.add("cur")
+            await wait(800)
+            cur.remove()
+            next.remove()
+            next.classList.remove("up")
+            next.classList.remove("second")
+            next.classList.add("first")
+
+            cur = document.createElement("span");
+            cur.innerHTML = data[counter]
+            cur.classList.add("cur")
+            next = document.createElement("span")
+            next.innerHTML = "|"
+            el.appendChild(cur)
+            el.appendChild(next)
+
+            counter = (counter + 1) % data.length
+            await wait(2000)
+            playNext()
+        }
+
+        function wait(duration){
+            return new Promise(resolve => {
+                setTimeout(resolve, duration)
+            });
+        }
+
+	</script>
+
+</Layout>
+
+<style lang="less" is:global>
+	
+.center{
+	height: calc(100% - 66px);
+	width: 100%;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	margin-top: 66px;
+
+	font-size: 60px;
+	color: #000000;
+	font-weight: 400;
+
+	span{
+		display: inline-block;
+		height: 66px;
+		opacity: 0;
+		transition: transform 1000ms, opacity 300ms;
+		transition-timing-function: cubic-bezier( 0, 0.96, 0.3, 1 );
+	}
+
+	.cur{
+		opacity: 1;
+	}
+	.up{
+		transform: translateY(-66px);
+	}
+
+}
+
+
+.bottom{
+	.title{
+		font-size: 40px;
+		line-height: 49px;
+	}
+}
+
+@media (max-width: 600px){
+	.center{
+		font-size: 50px;
+	}
+
+	.bottom{
+		.title{
+			font-size: 28px;
+			line-height: 30px;
+		}
+	}
+}
+
+</style>
